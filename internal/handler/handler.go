@@ -19,7 +19,7 @@ func (c *Controller) GetTokenHandler(w http.ResponseWriter, r *http.Request) {
 		c.Fail(w, http.StatusBadRequest, "failed to decode json", err)
 		return
 	}
-	w.Header().Set("Content-Type", "application/json")
+	//w.Header().Set("Content-Type", "application/json")
 	//get token
 	nliToken, err := c.service.GenerateToken(SetName, getTokenRequest.DeviceID)
 	if err != nil {
@@ -33,21 +33,3 @@ func (c *Controller) GetTokenHandler(w http.ResponseWriter, r *http.Request) {
 
 	c.Success(w, http.StatusOK, getTokenResponse)
 }
-
-/*var err error
-getTokenRequest.DeviceID, err = r.FormValue("device_id")
-
-if err != nil {
-	customHTTP.NewErrorResponse(w, http.StatusUnauthorized, "Error: "+err.Error())
-	return
-}
-w.Header().Set("Content-Type", "application/json")
-//get token
-
-getTokenResponse := GetTokenResponse{
-	CreatedAt: time.Now().String(),
-	NLIToken:  " ",
-	DeviceID:  getTokenRequest.DeviceID,
-}
-
-json.NewEncoder(w).Encode(&getTokenResponse)*/
