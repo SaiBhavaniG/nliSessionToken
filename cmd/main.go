@@ -1,12 +1,15 @@
 package main
 
-import "fmt"
+import (
+	"nliSessionToken/cmd/prepare"
+)
 
 func main() {
-	fmt.Println("Hi")
+	prepare.Prepare()
 }
+
 /*
-api is called - client do request server(backend) 
+api is called - client do request server(backend)
 IN Return Backend(server) will respond
 
 1. https://localhost:8080/api/v1/token?deviceid=12 : GET (Request Method)

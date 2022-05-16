@@ -7,30 +7,37 @@ import (
 	"github.hdfcbank.com/HDFCBANK/mb-microservices-utils/logger"
 )
 
-type dao struct {
+type daoClient struct {
 	client types.CacheAccessorService //cacheaccessor
-	logger *logger.Logger
+	*logger.Logger
 }
 
 type DaoAccessor interface {
 	CheckdeviceID(SetName, deviceID string) (bool, error)
 }
 
+func NewDao(logger *logger.Logger, client types.CacheAccessorService) DaoAccessor {
+	return &daoClient{
+		client: client,
+		Logger: logger,
+	}
+}
+
 func GetDaoAccessor(logger *logger.Logger) (DaoAccessor, error) {
 	cacheAccessor, err := cu.GetAeroCacheAccessorService(logger)
 	if err != nil {
-		return &dao{}, nil
+		return &daoClient{}, nil
 	}
-	obj := &dao{
+	obj := &daoClient{
 		client: cacheAccessor,
-		logger: logger,
+		Logger: logger,
 	}
 	return obj, nil
 }
 
-//user_device_mapping to be Changed(naming Convention)
+//user_device_mapping
 
-func (d *dao) CheckdeviceID(SetName, deviceID string) (bool, error) {
+func (d *daoClient) CheckdeviceID(SetName, deviceID string) (bool, error) {
 
 	data := cachemodels.GetCacheConfig{
 		Key:     deviceID,
