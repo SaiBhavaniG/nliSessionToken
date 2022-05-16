@@ -26,13 +26,12 @@ func (c *Controller) GetTokenHandler(w http.ResponseWriter, r *http.Request) {
 		c.Fail(w, http.StatusBadRequest, "failed to get token", err)
 	}
 	getTokenResponse := model.GetTokenResponse{
-		CreatedAt: time.Now().String(),
+		CreatedAt: time.Now(),
 		NLIToken:  nliToken,
 		DeviceID:  deviceID,
 	}
 
-	json.NewEncoder(w).Encode(&getTokenResponse)
-	c.Success(w, http.StatusOK, nil)
+	c.Success(w, http.StatusOK, getTokenResponse)
 }
 
 /*var err error

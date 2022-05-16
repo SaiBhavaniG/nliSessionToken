@@ -1,4 +1,6 @@
-package model
+package models
+
+import "time"
 
 type GetTokenRequest struct {
 	DeviceID string
@@ -6,5 +8,5 @@ type GetTokenRequest struct {
 type GetTokenResponse struct {
 	DeviceID  string
 	NLIToken  string
-	CreatedAt string
+	CreatedAt time.Time
 }
