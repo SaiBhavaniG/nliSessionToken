@@ -8,7 +8,7 @@ import (
 	"nliSessionToken/internal/service"
 
 	"github.com/go-playground/validator/v10"
-	cu "github.hdfcbank.com/HDFCBANK/mb-microservices-utils/cache-util"
+	//cu "github.hdfcbank.com/HDFCBANK/mb-microservices-utils/cache-util"
 	"github.hdfcbank.com/HDFCBANK/mb-microservices-utils/logger"
 	"github.hdfcbank.com/HDFCBANK/mb-microservices-utils/parser"
 	//"go.uber.org/zap"
@@ -30,7 +30,7 @@ func Prepare() {
 	//ctx := context.Background()
 
 	// configurable and pluggable doa and client
-	daoAeroClient := GetDaoAccessor(logger)
+	daoAeroClient := dao.GetDaoAccessor(logger)
 	srv := service.NewService(daoAeroClient, logger)
 
 	router := handler.NewController(logger, srv)
@@ -39,25 +39,10 @@ func Prepare() {
 	serveApp(router, logger, config.HostAddress)
 }
 
-func GetDaoAccessor(logger *logger.Logger) dao.DaoAccessor {
+/*func GetDaoAccessor(logger *logger.Logger) dao.DaoAccessor {
 	cacheAccessor, err := cu.GetAeroCacheAccessorService(logger)
 	if err != nil {
 		logger.Fatal("failed to initalise aero client, error: " + err.Error())
 	}
 	return dao.NewDao(logger, cacheAccessor)
-}
-
-/*func prepareAeroClient(logger *logger.Logger, config models.Config) dao.Dao {
-	switch config.DaoClient {
-	case "aerospike":
-		aeroClient, err := aero.NewClient(config.AeroHostName, config.AeroPort)
-		if err != nil {
-			logger.Fatal("failed to initalise aero client, error: " + err.Error())
-		}
-		return dao.NewAeroClient(logger, aeroClient)
-	default:
-		logger.Fatal("unknown doa client defined")
-	}
-
-	return nil
 }*/

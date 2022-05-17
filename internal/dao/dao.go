@@ -1,6 +1,7 @@
 package dao
 
 import (
+	cu "github.hdfcbank.com/HDFCBANK/mb-microservices-utils/cache-util"
 	cachemodels "github.hdfcbank.com/HDFCBANK/mb-microservices-utils/cache-util/models"
 	"github.hdfcbank.com/HDFCBANK/mb-microservices-utils/cache-util/types"
 	"github.hdfcbank.com/HDFCBANK/mb-microservices-utils/logger"
@@ -23,7 +24,13 @@ func NewDao(logger *logger.Logger, client types.CacheAccessorService) DaoAccesso
 	}
 }
 
-//user_device_mapping
+func GetDaoAccessor(logger *logger.Logger) DaoAccessor {
+	cacheAccessor, err := cu.GetAeroCacheAccessorService(logger)
+	if err != nil {
+		logger.Fatal("failed to initalise aero client, error: " + err.Error())
+	}
+	return NewDao(logger, cacheAccessor)
+}
 
 func (d *daoClient) CheckdeviceID(SetName, device_ID string) (bool, error) {
 	keyvalue := map[string]interface{}{
@@ -38,7 +45,6 @@ func (d *daoClient) CheckdeviceID(SetName, device_ID string) (bool, error) {
 	if err != nil {
 		//need to include multilingual error util in handler
 		d.Error("failed to get key from db", zap.Error(err))
-
 		return false, err
 	}
 	if check == nil {
