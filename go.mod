@@ -5,7 +5,6 @@ go 1.17
 require github.hdfcbank.com/HDFCBANK/mb-microservices-utils v0.0.0-20220511132821-40309c57708d
 
 require (
-	github.com/aerospike/aerospike-client-go/v5 v5.7.0
 	github.com/go-playground/validator/v10 v10.10.0
 	github.com/gorilla/mux v1.8.0
 	github.com/mazen160/go-random v0.0.0-20210308102632-d2b501c85c03
@@ -13,6 +12,7 @@ require (
 )
 
 require (
+	github.com/aerospike/aerospike-client-go/v5 v5.7.0 // indirect
 	github.com/caarlos0/env/v6 v6.9.1 // indirect
 	github.com/go-playground/locales v0.14.0 // indirect
 	github.com/go-playground/universal-translator v0.18.0 // indirect

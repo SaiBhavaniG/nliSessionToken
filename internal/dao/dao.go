@@ -1,7 +1,6 @@
 package dao
 
 import (
-	cu "github.hdfcbank.com/HDFCBANK/mb-microservices-utils/cache-util"
 	cachemodels "github.hdfcbank.com/HDFCBANK/mb-microservices-utils/cache-util/models"
 	"github.hdfcbank.com/HDFCBANK/mb-microservices-utils/cache-util/types"
 	"github.hdfcbank.com/HDFCBANK/mb-microservices-utils/logger"
@@ -22,18 +21,6 @@ func NewDao(logger *logger.Logger, client types.CacheAccessorService) DaoAccesso
 		client: client,
 		Logger: logger,
 	}
-}
-
-func GetDaoAccessor(logger *logger.Logger) (DaoAccessor, error) {
-	cacheAccessor, err := cu.GetAeroCacheAccessorService(logger)
-	if err != nil {
-		return &daoClient{}, nil
-	}
-	obj := &daoClient{
-		client: cacheAccessor,
-		Logger: logger,
-	}
-	return obj, nil
 }
 
 //user_device_mapping

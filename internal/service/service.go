@@ -1,7 +1,6 @@
 package service
 
 import (
-	"nliSessionToken/internal/client"
 	"nliSessionToken/internal/dao"
 
 	randtok "github.com/mazen160/go-random"
@@ -15,16 +14,14 @@ type TokenService interface {
 }
 
 type serviceImpl struct {
-	doa    dao.DaoAccessor
-	client client.TokenClient
+	doa dao.DaoAccessor
 	*logger.Logger
 	*response.Response
 }
 
-func NewService(doa dao.DaoAccessor, client client.TokenClient, logger *logger.Logger) TokenService {
+func NewService(doa dao.DaoAccessor, logger *logger.Logger) TokenService {
 	return &serviceImpl{
 		doa:      doa,
-		client:   client,
 		Logger:   logger,
 		Response: response.NewResponse(logger),
 	}

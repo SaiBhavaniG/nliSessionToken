@@ -1,16 +1,17 @@
 package prepare
 
 import (
-	"context"
+	//"context"
 	"nliSessionToken/internal/dao"
 	"nliSessionToken/internal/handler"
 	"nliSessionToken/internal/models"
 	"nliSessionToken/internal/service"
 
-	aero "github.com/aerospike/aerospike-client-go/v5"
 	"github.com/go-playground/validator/v10"
+	cu "github.hdfcbank.com/HDFCBANK/mb-microservices-utils/cache-util"
 	"github.hdfcbank.com/HDFCBANK/mb-microservices-utils/logger"
 	"github.hdfcbank.com/HDFCBANK/mb-microservices-utils/parser"
+	//"go.uber.org/zap"
 )
 
 func Prepare() {
@@ -26,33 +27,37 @@ func Prepare() {
 
 	logger := logger.New(config.AppID)
 	defer logger.Sync()
-	ctx := context.Background()
+	//ctx := context.Background()
 
 	// configurable and pluggable doa and client
-	daoClient := prepareAeroClient(logger, config)
-	srv := service.NewService(daoClient, tokenClient, logger)
+	daoAeroClient := GetDaoAccessor(logger)
+	srv := service.NewService(daoAeroClient, logger)
+
 	router := handler.NewController(logger, srv)
 
 	// serve the app
 	serveApp(router, logger, config.HostAddress)
 }
 
-func prepareAeroClient(logger *logger.Logger, config models.Config) dao.DaoAccessor {
+func GetDaoAccessor(logger *logger.Logger) dao.DaoAccessor {
+	cacheAccessor, err := cu.GetAeroCacheAccessorService(logger)
+	if err != nil {
+		logger.Fatal("failed to initalise aero client, error: " + err.Error())
+	}
+	return dao.NewDao(logger, cacheAccessor)
+}
+
+/*func prepareAeroClient(logger *logger.Logger, config models.Config) dao.Dao {
 	switch config.DaoClient {
 	case "aerospike":
-		daoClientnew, err := aero.NewClient(config.AeroHostName, config.AeroPort)
+		aeroClient, err := aero.NewClient(config.AeroHostName, config.AeroPort)
 		if err != nil {
 			logger.Fatal("failed to initalise aero client, error: " + err.Error())
 		}
-		return dao.NewDao(logger, daoClientnew)
+		return dao.NewAeroClient(logger, aeroClient)
 	default:
 		logger.Fatal("unknown doa client defined")
 	}
 
 	return nil
-
-}
-
-/*func prepareAeroClient(logger *logger.Logger, config invalid type) {
-	panic("unimplemented")
 }*/
